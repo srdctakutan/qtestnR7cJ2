@@ -292,14 +292,23 @@ function parseJST(str) {
   return new Date(normalized);
 }
 
-/** Date → "本日M月D日H時mm分" 形式（JSTで表示） */
+/** Date → "（本日）M月D日H時mm分" 形式（JSTで表示）
+ *  当日なら「本日」を付ける、それ以外は日付のみ */
 function formatDeadline(date) {
   const jst = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
   const m   = jst.getMonth() + 1;
   const d   = jst.getDate();
   const h   = jst.getHours();
   const min = String(jst.getMinutes()).padStart(2, '0');
-  return `本日${m}月${d}日${h}時${min}分`;
+
+  // 今日の日付（JST）と比較
+  const nowJST   = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  const isToday  = nowJST.getFullYear() === jst.getFullYear()
+                && nowJST.getMonth()    === jst.getMonth()
+                && nowJST.getDate()     === jst.getDate();
+
+  const prefix = isToday ? '本日' : '';
+  return `${prefix}${m}月${d}日${h}時${min}分`;
 }
 
 /** 正解キー → 選択肢テキスト */
