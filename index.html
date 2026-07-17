@@ -527,9 +527,8 @@ async function loadQuiz() {
     if (data.error) throw new Error(data.error);
 
     quizData = data;
-    document.body.classList.remove('is-loading');
-    renderHeader(data);
 
+    // 時間チェックをヘッダー描画より先に行う（リダイレクト前にヘッダーを見せない）
     const now       = new Date();
     const startDate = parseJST(data.start_time);
     const endDate   = parseJST(data.end_time);
@@ -539,6 +538,10 @@ async function loadQuiz() {
       window.location.href = 'https://tune-life.com/';
       return;
     }
+
+    // ここで初めてヘッダーを表示
+    document.body.classList.remove('is-loading');
+    renderHeader(data);
 
     // 配信区間終了後 → 終了画面
     if (endDate && now > endDate) {
