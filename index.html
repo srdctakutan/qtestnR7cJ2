@@ -126,6 +126,37 @@
   .answer-letter { font-size: 48px; font-weight: 900; color: rgba(61,191,191,0.25); line-height: 1; margin-bottom: 4px; text-align: center; }
   .answer-main { font-size: 22px; font-weight: 900; line-height: 1.5; margin-bottom: 20px; }
   .explanation { font-size: 13px; line-height: 1.85; white-space: pre-wrap; }
+
+  /* ─── 正解表示アニメーション（チェックマーク） ─── */
+  .check-badge-wrap {
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
+    max-height: 72px; margin-bottom: 14px;
+    animation: checkCollapse 0.35s ease 0.65s forwards;
+  }
+  .check-badge {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    animation: checkPop 0.45s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .check-badge svg { width: 30px; height: 30px; }
+  .check-badge path {
+    fill: none; stroke: #fff; stroke-width: 4;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 30; stroke-dashoffset: 30;
+    animation: drawCheck 0.3s ease 0.2s forwards;
+  }
+  .answer-content { opacity: 0; animation: fadeIn 0.45s ease 0.55s forwards; }
+  @keyframes checkPop {
+    0%   { transform: scale(0);    opacity: 0; }
+    60%  { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1);    opacity: 1; }
+  }
+  @keyframes drawCheck { to { stroke-dashoffset: 0; } }
+  @keyframes checkCollapse {
+    to { max-height: 0; margin-bottom: 0; opacity: 0; }
+  }
   .citations {
     font-size: 11px; color: var(--text-light); line-height: 1.7;
     border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;
@@ -272,9 +303,16 @@
     <div class="card animate-in">
       <div class="correct-label">正解は...</div>
       <div class="answer-box">
-        <div class="answer-letter" id="answerLetter"></div>
-        <div class="answer-main" id="answerMain"></div>
-        <div class="explanation" id="explanationText"></div>
+        <div class="check-badge-wrap">
+          <div class="check-badge">
+            <svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>
+          </div>
+        </div>
+        <div class="answer-content">
+          <div class="answer-letter" id="answerLetter"></div>
+          <div class="answer-main" id="answerMain"></div>
+          <div class="explanation" id="explanationText"></div>
+        </div>
       </div>
     </div>
 
