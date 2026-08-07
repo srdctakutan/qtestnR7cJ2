@@ -212,10 +212,29 @@
   /* ─── Preview Banner ─── */
   .preview-banner {
     width: 100%; max-width: 480px; margin: 0 auto 16px;
-    background: var(--orange); color: #fff; text-align: center;
-    font-size: 14px; font-weight: 900; letter-spacing: 0.08em;
-    padding: 10px 16px; border-radius: 8px;
+    background: var(--orange); color: #fff;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 14px; font-weight: 900; letter-spacing: 0.04em;
+    padding: 10px 14px; border-radius: 8px;
     box-shadow: var(--shadow);
+  }
+  .preview-banner .preview-label { white-space: nowrap; }
+  .preview-banner .quiz-select {
+    flex: 1; min-width: 140px;
+    padding: 6px 8px; border-radius: 6px; border: none;
+    font-family: inherit; font-size: 12px; font-weight: 700;
+    color: var(--text); cursor: pointer;
+  }
+  .preview-banner .quiz-load-btn {
+    padding: 6px 14px; background: #fff; color: var(--orange);
+    border: none; border-radius: 6px; font-family: inherit;
+    font-size: 12px; font-weight: 900; cursor: pointer;
+    white-space: nowrap; transition: opacity 0.2s;
+  }
+  .preview-banner .quiz-load-btn:hover { opacity: 0.85; }
+  .preview-banner .quiz-status {
+    width: 100%; font-size: 10px; color: rgba(255,255,255,0.85);
+    font-weight: 500; letter-spacing: 0;
   }
 
   /* ─── Notice bar ─── */
@@ -245,7 +264,14 @@
 </style>
 </head>
 <body>
-<div class="preview-banner">プレビュー画面</div>
+<div class="preview-banner">
+  <span class="preview-label">プレビュー画面</span>
+  <select id="quizSelect" class="quiz-select">
+    <option value="">── クイズを選択 ──</option>
+  </select>
+  <button type="button" class="quiz-load-btn" onclick="loadSelectedQuiz()">表示</button>
+  <div class="quiz-status" id="quizSelectStatus"></div>
+</div>
 <div class="container">
 
   <!-- ===== HEADER (動的に書き換え) ===== -->
@@ -345,6 +371,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbw7jPief1-F02kBbZxNVFcr
 
 let quizData = null;
 let selectedValue = null;
+let allQuizzes = [];  // action=list で取得したクイズ一覧（プルダウン用）
 
 // プレビュー用に確認コードは固定（入力欄は非表示）
 const PREVIEW_CODE = 'TESTPR';
@@ -613,7 +640,78 @@ async function loadQuiz() {
   }
 }
 
+// ── プルダウン用：GASから全クイズ一覧を取得 ─────────────────────────────
+
+async function loadQuizList() {
+  const statusEl = document.getElementById('quizSelectStatus');
+  try {
+    const res = await fetch(`${GAS_URL}?action=list`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    allQuizzes = data.quizzes || [];
+
+    const sel = document.getElementById('quizSelect');
+    sel.innerHTML = '<option value="">── クイズを選択 ──</option>';
+    allQuizzes.forEach((q, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+
+      let dispDate = '';
+      if (q.delivery_date) {
+        const d = new Date(q.delivery_date);
+        if (!isNaN(d)) {
+          const jst = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+          dispDate = `${jst.getFullYear()}/${jst.getMonth() + 1}/${jst.getDate()}`;
+        } else {
+          dispDate = String(q.delivery_date); // 既に文字列の場合はそのまま
+        }
+      }
+      const timingLabel = q.timing === 'e' ? '夕' : q.timing === 'm' ? '朝' : '';
+      const headline = q.headline
+        ? q.headline.slice(0, 20) + '…'
+        : q.question ? q.question.slice(0, 20) + '…' : '';
+      const label = dispDate
+        ? `${dispDate}${timingLabel ? '(' + timingLabel + ')' : ''} ${headline}`
+        : `行${i + 2}`;
+      opt.textContent = label;
+      sel.appendChild(opt);
+    });
+
+    statusEl.textContent = `${allQuizzes.length}件のクイズを取得しました`;
+  } catch (e) {
+    console.error('クイズ一覧取得エラー:', e);
+    statusEl.textContent = `一覧取得に失敗：${e.message}`;
+  }
+}
+
+// ── プルダウンで選択したクイズを表示（配信期間の制約は無視） ──────────────
+
+function loadSelectedQuiz() {
+  const sel = document.getElementById('quizSelect');
+  const idx = sel.value;
+  if (idx === '') { alert('クイズを選択してください。'); return; }
+
+  const data = allQuizzes[parseInt(idx, 10)];
+  if (!data) { alert('選択したクイズの読み込みに失敗しました。'); return; }
+
+  quizData = data;
+  selectedValue = null;
+
+  document.body.classList.remove('is-loading');
+  renderHeader(data);
+  renderQuestion(data);
+  showOnly('questionScreen');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const timingLabel = data.timing === 'e' ? '夕' : data.timing === 'm' ? '朝' : '';
+  document.getElementById('quizSelectStatus').textContent =
+    `表示中：${data.delivery_date || ''}${timingLabel ? '(' + timingLabel + ')' : ''}`;
+}
+
 loadQuiz();
+loadQuizList();
 </script>
 </body>
 </html>
