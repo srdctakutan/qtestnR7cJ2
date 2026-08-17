@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --teal: #00A197;
     --teal-dark: #2aa0a0;
@@ -23,7 +22,6 @@
     --radius: 12px;
     --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
-
   body {
     font-family: 'Noto Sans JP', sans-serif;
     background: var(--bg);
@@ -34,9 +32,7 @@
     align-items: center;
     padding: 24px 16px 48px;
   }
-
   .container { width: 100%; max-width: 480px; }
-
   /* ─── Header ─── */
   .header {
     text-align: center;
@@ -55,11 +51,9 @@
     border: 1.5px solid var(--orange); border-radius: 20px;
     font-size: 12px; color: var(--orange); font-weight: 700;
   }
-
   /* ─── Cards ─── */
   .card { background: var(--card-bg); padding: 24px 20px; box-shadow: var(--shadow); }
   .card + .card { margin-top: 2px; }
-
   /* ─── Code Input ─── */
   .section-label { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
   .section-label .required { color: var(--orange); margin-left: 4px; }
@@ -71,7 +65,6 @@
   }
   .input-field:focus { border-color: var(--teal); }
   .input-field::placeholder { color: #bbb; }
-
   /* ─── Question ─── */
   .question-badge {
     display: inline-block; background: var(--teal); color: #fff;
@@ -79,7 +72,6 @@
     border-radius: 4px; margin-bottom: 12px;
   }
   .question-text { font-size: 14px; line-height: 1.8; font-weight: 500; margin-bottom: 16px; }
-
   /* ─── Options ─── */
   .options { display: flex; flex-direction: column; gap: 10px; }
   .option {
@@ -101,7 +93,6 @@
     opacity: 0; transform: scale(0); transition: opacity 0.2s, transform 0.2s;
   }
   .option.selected .radio-dot { opacity: 1; transform: scale(1); }
-
   /* ─── Submit ─── */
   .footer-card {
     background: var(--card-bg); padding: 16px 20px 24px;
@@ -115,19 +106,16 @@
   }
   .submit-btn:hover { background: var(--orange-dark); transform: translateY(-1px); }
   .submit-btn:active { transform: translateY(0); }
-
   /* ─── Screens ─── */
   .hidden { display: none !important; }
   .result-screen { display: none; }
   .result-screen.visible { display: block; }
-
   /* ─── Result ─── */
   .correct-label { text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 16px; }
   .answer-box { background: var(--answer-bg); border-radius: var(--radius); padding: 24px 20px; margin-bottom: 16px; }
   .answer-letter { font-size: 48px; font-weight: 900; color: var(--teal); line-height: 1; margin-bottom: 4px; text-align: center; }
   .answer-main { font-size: 22px; font-weight: 900; color: var(--teal); line-height: 1.5; margin-bottom: 20px; }
   .explanation { font-size: 13px; line-height: 1.85; white-space: pre-wrap; }
-
   /* ─── 正解表示アニメーション（チェックマーク） ─── */
   .check-badge-wrap {
     display: flex; justify-content: center; align-items: center;
@@ -163,7 +151,6 @@
     border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;
   }
   .citations .cite-title { font-weight: 700; margin-bottom: 4px; }
-
   /* ─── Reward Banner ─── */
   .reward-banner {
     text-align: center; padding: 20px; background: #fff9f0;
@@ -171,7 +158,6 @@
   }
   .reward-banner .banner-title { font-size: 14px; font-weight: 900; color: var(--orange); margin-bottom: 6px; }
   .reward-banner p { font-size: 12px; line-height: 1.8; }
-
   /* ─── Expired Screen ─── */
   .expired-screen {
     display: none; text-align: center;
@@ -181,10 +167,8 @@
   .expired-screen.visible { display: block; }
   .expired-screen p { font-size: 14px; line-height: 2; color: var(--text); }
   .expired-screen .push-note { margin-top: 16px; font-size: 14px; font-weight: 700; color: var(--teal); }
-
   /* ─── ローディング中はheaderを隠す ─── */
   body.is-loading .header { display: none; }
-
   /* ─── Loading / Error ─── */
   .loading-screen {
     text-align: center; padding: 80px 24px;
@@ -208,7 +192,6 @@
     box-shadow: var(--shadow); color: #c00; font-size: 14px; line-height: 1.8;
   }
   .error-screen.visible { display: block; }
-
   /* ─── Preview Banner ─── */
   .preview-banner {
     width: 100%; max-width: 480px; margin: 0 auto 16px;
@@ -232,11 +215,23 @@
     white-space: nowrap; transition: opacity 0.2s;
   }
   .preview-banner .quiz-load-btn:hover { opacity: 0.85; }
-  .preview-banner .quiz-status {
-    width: 100%; font-size: 10px; color: rgba(255,255,255,0.85);
-    font-weight: 500; letter-spacing: 0;
+  .preview-banner .quiz-copy-btn {
+    padding: 6px 12px; background: transparent; color: #fff;
+    border: 1.5px solid #fff; border-radius: 6px; font-family: inherit;
+    font-size: 11px; font-weight: 900; cursor: pointer;
+    white-space: nowrap; transition: background 0.2s, color 0.2s;
   }
-
+  .preview-banner .quiz-copy-btn:hover { background: #fff; color: var(--orange); }
+  .preview-banner .quiz-copy-btn:disabled {
+    opacity: 0.4; cursor: not-allowed; background: transparent; color: #fff;
+  }
+  .preview-banner .quiz-status {
+    width: 100%; font-size: 10px; color: rgba(255,255,255,0.9);
+    font-weight: 500; letter-spacing: 0; line-height: 1.6;
+  }
+  .preview-banner .quiz-status .dt-code {
+    font-weight: 900; color: #fff; letter-spacing: 0.02em;
+  }
   /* ─── Notice bar ─── */
   .notice-bar {
     background: #f0fafa; border-top: 1px solid var(--teal);
@@ -244,7 +239,6 @@
     text-align: center; padding: 10px 16px;
     font-size: 12px; color: var(--teal); font-weight: 700;
   }
-
   /* ─── Not-yet screen（配信前） ─── */
   .notyet-screen {
     display: none; text-align: center;
@@ -254,7 +248,6 @@
   .notyet-screen.visible { display: block; }
   .notyet-screen p { font-size: 14px; line-height: 2; color: var(--text); }
   .notyet-screen .push-note { margin-top: 16px; font-size: 14px; font-weight: 700; color: var(--teal); }
-
   /* ─── Animations ─── */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(12px); }
@@ -270,10 +263,10 @@
     <option value="">── クイズを選択 ──</option>
   </select>
   <button type="button" class="quiz-load-btn" onclick="loadSelectedQuiz()">表示</button>
+  <button type="button" class="quiz-copy-btn" id="copyDtBtn" onclick="copyDt()" disabled>dtコピー</button>
   <div class="quiz-status" id="quizSelectStatus"></div>
 </div>
 <div class="container">
-
   <!-- ===== HEADER (動的に書き換え) ===== -->
   <div class="header">
     <div class="brand">Tune Life</div>
@@ -282,33 +275,27 @@
     <div class="reward-sub" id="rewardSub">間違えても100ポイント贈呈</div>
     <div class="deadline-badge" id="deadlineBadge">回答期限：読み込み中...</div>
   </div>
-
   <!-- ===== LOADING ===== -->
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
     <div>読み込み中です...</div>
   </div>
-
   <!-- ===== ERROR ===== -->
   <div class="error-screen" id="errorScreen">
     クイズの読み込みに失敗しました。<br>時間をおいて再度お試しください。
   </div>
-
   <!-- ===== EXPIRED ===== -->
   <div class="expired-screen" id="expiredScreen">
     <p>クイズは終了しました。<br>沢山の方にご回答いただきありがとうございました！</p>
     <div class="push-note">毎日朝夕のPUSH通知もお楽しみに！</div>
   </div>
-
   <!-- ===== NOT YET（配信前） ===== -->
   <div class="notyet-screen" id="notyetScreen">
     <p>本日のクイズはまだ配信されていません。<br>配信開始時刻になりましたら再度アクセスしてください。</p>
     <div class="push-note">毎日朝夕のPUSH通知もお楽しみに！</div>
   </div>
-
   <!-- ===== QUESTION SCREEN ===== -->
   <div id="questionScreen" class="hidden">
-
     <div class="card" id="uid_block" style="display:none;">
       <div class="section-label">
         Tune Life アプリの確認コードを入力してください（6文字）<span class="required">*</span>
@@ -317,7 +304,6 @@
       <div class="hint">※ ここを間違えますとポイント付与ができませんのでご注意ください</div>
       <input type="text" class="input-field" id="codeInput" placeholder="確認コードを入力" maxlength="6" value="TESTPR">
     </div>
-
     <div class="card" style="margin-top:2px;">
       <div>
         <span class="question-badge">問題</span>
@@ -326,17 +312,13 @@
       <div class="question-text" id="questionText"></div>
       <div class="options" id="options"></div>
     </div>
-
     <div class="footer-card">
       <div class="notice-bar">※ 回答は1人1回まで。2回以上の回答は無効となります</div>
       <button class="submit-btn" onclick="submitAnswer()" style="margin-top:12px;">回答する</button>
     </div>
-
   </div><!-- /questionScreen -->
-
   <!-- ===== RESULT SCREEN ===== -->
   <div id="resultScreen" class="result-screen">
-
     <div class="card animate-in">
       <div class="correct-label">正解は...</div>
       <div class="answer-box">
@@ -352,42 +334,34 @@
         </div>
       </div>
     </div>
-
     <div class="reward-banner animate-in" style="animation-delay:0.15s;">
       <div class="banner-title" id="resultBannerTitle">正解した方！</div>
       <p id="resultBannerBody">10日以内にポイントが付与されます！<br>ポイント付与までしばらくお待ちいただけますと幸いです。</p>
     </div>
-
   </div><!-- /resultScreen -->
-
 </div><!-- /container -->
-
 <script>
 // =====================================================================
 // ★ 設定：GAS WebアプリのURLをここに入力してください
 // =====================================================================
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbw7jPief1-F02kBbZxNVFcr-RBfS5oRjuD37Keyj2WxrjLyLkpZ6Og0aVjWnTyo4wqyvg/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxSm3HQtWN5-UBaztfqq94bAQHEjpliRQ-Jd0hBH-2XcbRNacDTATJcbeHO2LKGaDhI/exec';
 // =====================================================================
-
 let quizData = null;
 let selectedValue = null;
-let allQuizzes = [];  // action=list で取得したクイズ一覧（プルダウン用）
-
+let allQuizzes = [];   // action=list で取得したクイズ一覧（プルダウン用のメタ情報）
+let currentDt = '';    // 現在プレビュー表示中のクイズの dt（コピー用）
 // プレビュー用に確認コードは固定（入力欄は非表示）
 const PREVIEW_CODE = 'TESTPR';
-
 // ── ユーティリティ ──────────────────────────────────────────────────
-
 /** "YYYY/MM/DD HH:mm:ss" または ISO形式 → Date
  *  GASのDate→JSON変換 "2026-07-13T09:00:00.000Z"(UTC)も吸収 */
 function parseJST(str) {
   if (!str) return null;
-  if (str.includes('T')) return new Date(str); // ISO形式はそのままパース
+  if (String(str).includes('T')) return new Date(str); // ISO形式はそのままパース
   // "2026/07/13 18:00:00" → "2026-07-13T18:00:00+09:00"
-  const normalized = str.replace(/\//g, '-').replace(' ', 'T') + '+09:00';
+  const normalized = String(str).replace(/\//g, '-').replace(' ', 'T') + '+09:00';
   return new Date(normalized);
 }
-
 /** Date → "（本日）M月D日H時mm分" 形式（JSTで表示）
  *  当日なら「本日」を付ける、それ以外は日付のみ */
 function formatDeadline(date) {
@@ -396,25 +370,40 @@ function formatDeadline(date) {
   const d   = jst.getDate();
   const h   = jst.getHours();
   const min = String(jst.getMinutes()).padStart(2, '0');
-
   // 今日の日付（JST）と比較
   const nowJST   = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
   const isToday  = nowJST.getFullYear() === jst.getFullYear()
                 && nowJST.getMonth()    === jst.getMonth()
                 && nowJST.getDate()     === jst.getDate();
-
   const prefix = isToday ? '本日' : '';
   return `${prefix}${m}月${d}日${h}時${min}分`;
 }
-
 /** 正解キー → 選択肢テキスト */
 function getAnswerText(key, data) {
   const map = { A: data.option_A, B: data.option_B, C: data.option_C };
   return map[key] || '';
 }
-
+/** delivery_date（Date文字列/ISO） → "YYYY/M/D" 形式（JST） */
+function formatDispDate(deliveryDate) {
+  if (!deliveryDate) return '';
+  const d = new Date(deliveryDate);
+  if (isNaN(d)) return String(deliveryDate); // 既に文字列の場合はそのまま
+  const jst = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  return `${jst.getFullYear()}/${jst.getMonth() + 1}/${jst.getDate()}`;
+}
+/** クイズ行 → dt（YYYYMMDD + delivery_id）を生成
+ *  delivery_date と delivery_id が揃っていない場合は空文字を返す */
+function buildDt(q) {
+  if (!q || !q.delivery_date || !q.delivery_id) return '';
+  const d = new Date(q.delivery_date);
+  if (isNaN(d)) return '';
+  const jst = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  const yyyy = jst.getFullYear();
+  const mm = String(jst.getMonth() + 1).padStart(2, '0');
+  const dd = String(jst.getDate()).padStart(2, '0');
+  return `${yyyy}${mm}${dd}${q.delivery_id}`;
+}
 // ── 画面切替ヘルパー ────────────────────────────────────────────────
-
 function showOnly(id) {
   ['loadingScreen','errorScreen','expiredScreen','notyetScreen','questionScreen','resultScreen']
     .forEach(s => {
@@ -432,36 +421,28 @@ function showOnly(id) {
       }
     });
 }
-
 // ── ヘッダー描画 ────────────────────────────────────────────────────
-
 function renderHeader(data) {
   // タイトルは固定文（headlineはヘッダー下部の帯テキストとして使わない）
   document.getElementById('headerTitle').textContent = 'ポイント貯まるクイズ';
-
   // 回答期限バッジ：end_time の1分前を表示
   const endDate = parseJST(data.end_time);
-  if (endDate) {
+  if (endDate && !isNaN(endDate.getTime())) {
     const deadlineDate = new Date(endDate.getTime() - 60 * 1000); // -1分
     document.getElementById('deadlineBadge').textContent =
       `回答期限：${formatDeadline(deadlineDate)}まで`;
   }
 }
-
 // ── 問題画面描画 ────────────────────────────────────────────────────
-
 function renderQuestion(data) {
   document.getElementById('questionText').textContent = data.question;
-
   const optionsEl = document.getElementById('options');
   optionsEl.innerHTML = '';
-
   const opts = [
     { key: 'A', text: data.option_A },
     { key: 'B', text: data.option_B },
     { key: 'C', text: data.option_C },
-  ].filter(o => o.text && o.text.trim() !== '');
-
+  ].filter(o => o.text && String(o.text).trim() !== '');
   opts.forEach(o => {
     const div = document.createElement('div');
     div.className = 'option';
@@ -474,17 +455,13 @@ function renderQuestion(data) {
     optionsEl.appendChild(div);
   });
 }
-
 // ── 結果画面描画 ────────────────────────────────────────────────────
-
 function renderResult(data, isCorrect) {
   const correctKey = (data.correct_answer || '').trim().toUpperCase();
   const answerText = getAnswerText(correctKey, data);
-
   document.getElementById('answerLetter').textContent = correctKey;
   document.getElementById('answerMain').textContent = answerText;
   document.getElementById('explanationText').textContent = data.explanation || '';
-
   if (isCorrect) {
     document.getElementById('resultBannerTitle').textContent = '正解した方！';
     document.getElementById('resultBannerBody').innerHTML =
@@ -495,31 +472,27 @@ function renderResult(data, isCorrect) {
       '不正解でもポイントが付与されます！<br>ポイント付与までしばらくお待ちいただけますと幸いです。';
   }
 }
-
 // ── 選択処理 ────────────────────────────────────────────────────────
-
 function selectOption(el) {
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selectedValue = el.dataset.value;
 }
-
 // ── 回答送信 ────────────────────────────────────────────────────────
-
 function submitAnswer() {
   const code = PREVIEW_CODE;
   if (!selectedValue) { alert('回答を選択してください。'); return; }
-
   const correctKey = (quizData.correct_answer || '').trim().toUpperCase();
   const isCorrect = selectedValue === correctKey;
-
   // 選択肢の表示テキストを取得
   const selectedEl = document.querySelector(`.option[data-value="${selectedValue}"] span`);
   const selectedText = selectedEl ? selectedEl.textContent.trim() : '';
-
   // GASに回答を記録（img送信方式：CORSもリダイレクトも回避）
   const recordParams = new URLSearchParams({
     action:      'record',
+    delivery_date: quizData.delivery_date || '',
+    delivery_id:   quizData.delivery_id || '',
+    headline:      quizData.headline || '',
     start_time:  quizData.start_time ? new Date(quizData.start_time).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }).replace(/\//g, '/') : '',
     tl_uid:      code,
     answer_key:  selectedValue,
@@ -529,57 +502,36 @@ function submitAnswer() {
   });
   const _img = new Image();
   _img.src = `${GAS_URL}?${recordParams.toString()}`;
-
   renderResult(quizData, isCorrect);
   showOnly('resultScreen');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-// ── d_time パラメータ解析 ────────────────────────────────────────────
-// 形式：YYYYMMDDm（朝）または YYYYMMDDe（夕方）
-// 例：20270727m → 2027年7月27日 朝配信
-
-function parseDTime(param) {
-  if (!param) return null;
-  const m = param.match(/^(\d{4})(\d{2})(\d{2})([me])$/i);
-  if (!m) return null;
-  return {
-    year:   parseInt(m[1]),
-    month:  parseInt(m[2]),
-    day:    parseInt(m[3]),
-    timing: m[4].toLowerCase(), // 'm' or 'e'
-    // GASに渡す delivery_date 形式
-    dateStr: `${parseInt(m[1])}/${parseInt(m[2])}/${parseInt(m[3])}`,
-  };
-}
-
-// ── メイン：GAS からデータ取得 ───────────────────────────────────────
-
+// ── メイン：GAS からデータ取得（本番と同じ経路） ────────────────────────
+// URLに ?dt=YYYYMMDDdeliveryId が付いていれば action=get&dt=... で取得。
+// dt が無ければ従来通り配信中クイズ（GAS_URLのみ）を取得。
 async function loadQuiz() {
   document.body.classList.add('is-loading');
   showOnly('loadingScreen');
   try {
     // URLパラメータを取得
     const params  = new URLSearchParams(window.location.search);
-    const dTime   = params.get('d_time');
-    const parsed  = parseDTime(dTime);
-
-    // d_time パラメータあり → 指定クイズをプレビュー／なし → 従来通り配信中クイズ
-    const isPreview = !!parsed;
+    const dt      = params.get('dt');
+    const isPreview = !!dt;
+    // dt パラメータあり → 本番と同じ action=get&dt=... で取得
     const fetchUrl = isPreview
-      ? `${GAS_URL}?action=get&date=${parsed.dateStr}&timing=${parsed.timing}`
+      ? `${GAS_URL}?action=get&dt=${encodeURIComponent(dt)}`
       : GAS_URL;
-
     const res = await fetch(fetchUrl);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-
-    if (data.error === 'no_quiz_found' || data.error === 'no_quiz_today') {
+    if (data.error === 'no_quiz_found' || data.error === 'no_quiz_today' || data.error === 'invalid_dt') {
       if (isPreview) {
         // プレビューモードでは配信サイトへリダイレクトせず、その場でエラー表示
         document.body.classList.remove('is-loading');
         document.getElementById('errorScreen').textContent =
-          '指定された d_time のクイズが見つかりませんでした。';
+          data.error === 'invalid_dt'
+            ? 'dt の形式が正しくありません（YYYYMMDD + 識別子）。'
+            : '指定された dt のクイズが見つかりませんでした。';
         showOnly('errorScreen');
         return;
       }
@@ -588,39 +540,33 @@ async function loadQuiz() {
       return;
     }
     if (data.error) throw new Error(data.error);
-
     quizData = data;
-
+    currentDt = dt || buildDt(data);
     document.body.classList.remove('is-loading');
     renderHeader(data);
-
     if (isPreview) {
       // プレビューモード：配信期間の制約（配信前リダイレクト／期限切れ画面）を無視して常に問題を表示
       renderQuestion(data);
       showOnly('questionScreen');
+      updateStatusFromData(data, currentDt);
       return;
     }
-
-    // ── ここから従来通りの挙動（d_time パラメータなし） ──
+    // ── ここから従来通りの挙動（dt パラメータなし） ──
     const now       = new Date();
     const startDate = parseJST(data.start_time);
     const endDate   = parseJST(data.end_time);
-
     // 配信区間より前 → tune-life.com にリダイレクト
     if (startDate && now < startDate) {
       window.location.href = 'https://tune-life.com/';
       return;
     }
-
     // 配信区間終了後 → 終了画面
     if (endDate && now > endDate) {
       showOnly('expiredScreen');
       return;
     }
-
     renderQuestion(data);
     showOnly('questionScreen');
-
     // 期限になったら自動で終了画面へ切替
     if (endDate) {
       const msUntilEnd = endDate.getTime() - now.getTime();
@@ -632,16 +578,13 @@ async function loadQuiz() {
         }, msUntilEnd);
       }
     }
-
   } catch (e) {
     console.error('Quiz load error:', e);
     document.body.classList.remove('is-loading');
     showOnly('errorScreen');
   }
 }
-
-// ── プルダウン用：GASから全クイズ一覧を取得 ─────────────────────────────
-
+// ── プルダウン用：GASから全クイズ一覧を取得（メタ情報のみ） ────────────────
 async function loadQuizList() {
   const statusEl = document.getElementById('quizSelectStatus');
   try {
@@ -649,67 +592,116 @@ async function loadQuizList() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-
     allQuizzes = data.quizzes || [];
-
     const sel = document.getElementById('quizSelect');
     sel.innerHTML = '<option value="">── クイズを選択 ──</option>';
     allQuizzes.forEach((q, i) => {
       const opt = document.createElement('option');
       opt.value = i;
-
-      let dispDate = '';
-      if (q.delivery_date) {
-        const d = new Date(q.delivery_date);
-        if (!isNaN(d)) {
-          const jst = new Date(d.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
-          dispDate = `${jst.getFullYear()}/${jst.getMonth() + 1}/${jst.getDate()}`;
-        } else {
-          dispDate = String(q.delivery_date); // 既に文字列の場合はそのまま
-        }
-      }
-      const timingLabel = q.timing === 'e' ? '夕' : q.timing === 'm' ? '朝' : '';
+      const dispDate = formatDispDate(q.delivery_date);
+      const deliveryId = q.delivery_id ? `[${q.delivery_id}]` : '[default]';
       const headline = q.headline
         ? q.headline.slice(0, 20) + '…'
         : q.question ? q.question.slice(0, 20) + '…' : '';
       const label = dispDate
-        ? `${dispDate}${timingLabel ? '(' + timingLabel + ')' : ''} ${headline}`
+        ? `${dispDate} ${deliveryId} ${headline}`
         : `行${i + 2}`;
       opt.textContent = label;
       sel.appendChild(opt);
     });
-
     statusEl.textContent = `${allQuizzes.length}件のクイズを取得しました`;
   } catch (e) {
     console.error('クイズ一覧取得エラー:', e);
     statusEl.textContent = `一覧取得に失敗：${e.message}`;
   }
 }
-
-// ── プルダウンで選択したクイズを表示（配信期間の制約は無視） ──────────────
-
-function loadSelectedQuiz() {
+// ── プルダウンで選択したクイズを本番と同じ経路（action=get&dt=...）で取得・表示 ──
+async function loadSelectedQuiz() {
   const sel = document.getElementById('quizSelect');
   const idx = sel.value;
   if (idx === '') { alert('クイズを選択してください。'); return; }
-
-  const data = allQuizzes[parseInt(idx, 10)];
-  if (!data) { alert('選択したクイズの読み込みに失敗しました。'); return; }
-
-  quizData = data;
-  selectedValue = null;
-
-  document.body.classList.remove('is-loading');
-  renderHeader(data);
-  renderQuestion(data);
-  showOnly('questionScreen');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  const timingLabel = data.timing === 'e' ? '夕' : data.timing === 'm' ? '朝' : '';
-  document.getElementById('quizSelectStatus').textContent =
-    `表示中：${data.delivery_date || ''}${timingLabel ? '(' + timingLabel + ')' : ''}`;
+  const meta = allQuizzes[parseInt(idx, 10)];
+  if (!meta) { alert('選択したクイズの読み込みに失敗しました。'); return; }
+  const dt = buildDt(meta);
+  const statusEl = document.getElementById('quizSelectStatus');
+  // delivery_id が未設定のクイズは dt を生成できない（本番経路で特定不可）
+  if (!dt) {
+    setCopyEnabled(false);
+    currentDt = '';
+    statusEl.innerHTML =
+      `このクイズは delivery_id が未設定のため、dt で特定できません。<br>` +
+      `スプレッドシートに delivery_id を設定してください。`;
+    return;
+  }
+  document.body.classList.add('is-loading');
+  showOnly('loadingScreen');
+  try {
+    // ★ 本番と同じ経路：action=get&dt=YYYYMMDDdeliveryId
+    const res = await fetch(`${GAS_URL}?action=get&dt=${encodeURIComponent(dt)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) {
+      document.body.classList.remove('is-loading');
+      setCopyEnabled(false);
+      currentDt = '';
+      const msg = data.error === 'no_quiz_found'
+        ? `dt=${dt} のクイズが見つかりませんでした（delivery_date / delivery_id の不一致の可能性）。`
+        : data.error === 'invalid_dt'
+          ? `dt=${dt} の形式が正しくありません。`
+          : `取得失敗：${data.error}`;
+      document.getElementById('errorScreen').textContent = msg;
+      showOnly('errorScreen');
+      statusEl.innerHTML = `取得失敗：<span class="dt-code">${dt}</span>`;
+      return;
+    }
+    quizData = data;
+    currentDt = dt;
+    selectedValue = null;
+    document.body.classList.remove('is-loading');
+    renderHeader(data);
+    renderQuestion(data);
+    showOnly('questionScreen');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateStatusFromData(data, dt);
+  } catch (e) {
+    console.error('選択クイズ取得エラー:', e);
+    document.body.classList.remove('is-loading');
+    setCopyEnabled(false);
+    currentDt = '';
+    document.getElementById('errorScreen').textContent = `取得失敗：${e.message}`;
+    showOnly('errorScreen');
+    statusEl.innerHTML = `取得失敗：<span class="dt-code">${dt}</span>`;
+  }
 }
-
+// ── ステータス表示更新（表示中の日付・識別子・dt） ─────────────────────
+function updateStatusFromData(data, dt) {
+  const dispDate = formatDispDate(data.delivery_date) || (data.delivery_date || '');
+  const deliveryId = data.delivery_id || 'default';
+  const statusEl = document.getElementById('quizSelectStatus');
+  statusEl.innerHTML =
+    `表示中：${dispDate} [${deliveryId}]<br>` +
+    `dt: <span class="dt-code">${dt || '(delivery_id未設定)'}</span>`;
+  setCopyEnabled(!!dt);
+}
+// ── dtコピー用ボタンの有効/無効切替 ─────────────────────────────────
+function setCopyEnabled(enabled) {
+  const btn = document.getElementById('copyDtBtn');
+  if (btn) btn.disabled = !enabled;
+}
+// ── 現在表示中クイズの dt をクリップボードにコピー ─────────────────────
+async function copyDt() {
+  if (!currentDt) { alert('コピーできる dt がありません。'); return; }
+  try {
+    await navigator.clipboard.writeText(currentDt);
+    const btn = document.getElementById('copyDtBtn');
+    const original = btn.textContent;
+    btn.textContent = 'コピー済';
+    setTimeout(() => { btn.textContent = original; }, 1500);
+  } catch (e) {
+    // クリップボードAPIが使えない環境向けフォールバック
+    window.prompt('この dt をコピーしてください：', currentDt);
+  }
+}
 loadQuiz();
 loadQuizList();
 </script>

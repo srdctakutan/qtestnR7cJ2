@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --teal: #00A197;
     --teal-dark: #2aa0a0;
@@ -23,7 +22,6 @@
     --radius: 12px;
     --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
-
   body {
     font-family: 'Noto Sans JP', sans-serif;
     background: var(--bg);
@@ -33,10 +31,7 @@
     justify-content: center;
     padding: 24px 16px 48px;
   }
-
   .container { width: 100%; max-width: 480px; }
-
-  /* ─── Header ─── */
   .header {
     text-align: center;
     padding: 32px 24px 24px;
@@ -54,12 +49,8 @@
     border: 1.5px solid var(--orange); border-radius: 20px;
     font-size: 12px; color: var(--orange); font-weight: 700;
   }
-
-  /* ─── Cards ─── */
   .card { background: var(--card-bg); padding: 24px 20px; box-shadow: var(--shadow); }
   .card + .card { margin-top: 2px; }
-
-  /* ─── Code Input ─── */
   .section-label { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
   .section-label .required { color: var(--orange); margin-left: 4px; }
   .hint { font-size: 11px; color: var(--text-light); margin-bottom: 4px; line-height: 1.6; }
@@ -70,16 +61,12 @@
   }
   .input-field:focus { border-color: var(--teal); }
   .input-field::placeholder { color: #bbb; }
-
-  /* ─── Question ─── */
   .question-badge {
     display: inline-block; background: var(--teal); color: #fff;
     font-size: 12px; font-weight: 700; padding: 3px 12px;
     border-radius: 4px; margin-bottom: 12px;
   }
   .question-text { font-size: 14px; line-height: 1.8; font-weight: 500; margin-bottom: 16px; }
-
-  /* ─── Options ─── */
   .options { display: flex; flex-direction: column; gap: 10px; }
   .option {
     display: flex; align-items: center; gap: 12px; padding: 14px 16px;
@@ -100,8 +87,6 @@
     opacity: 0; transform: scale(0); transition: opacity 0.2s, transform 0.2s;
   }
   .option.selected .radio-dot { opacity: 1; transform: scale(1); }
-
-  /* ─── Submit ─── */
   .footer-card {
     background: var(--card-bg); padding: 16px 20px 24px;
     border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow);
@@ -114,20 +99,14 @@
   }
   .submit-btn:hover { background: var(--orange-dark); transform: translateY(-1px); }
   .submit-btn:active { transform: translateY(0); }
-
-  /* ─── Screens ─── */
   .hidden { display: none !important; }
   .result-screen { display: none; }
   .result-screen.visible { display: block; }
-
-  /* ─── Result ─── */
   .correct-label { text-align: center; font-size: 15px; font-weight: 700; margin-bottom: 16px; }
   .answer-box { background: var(--answer-bg); border-radius: var(--radius); padding: 24px 20px; margin-bottom: 16px; }
   .answer-letter { font-size: 48px; font-weight: 900; color: var(--teal); line-height: 1; margin-bottom: 4px; text-align: center; }
   .answer-main { font-size: 22px; font-weight: 900; color: var(--teal); line-height: 1.5; margin-bottom: 20px; }
   .explanation { font-size: 13px; line-height: 1.85; white-space: pre-wrap; }
-
-  /* ─── 正解表示アニメーション（チェックマーク） ─── */
   .check-badge-wrap {
     display: flex; justify-content: center; align-items: center;
     overflow: hidden;
@@ -154,37 +133,22 @@
     100% { transform: scale(1);    opacity: 1; }
   }
   @keyframes drawCheck { to { stroke-dashoffset: 0; } }
-  @keyframes checkCollapse {
-    to { max-height: 0; margin-bottom: 0; opacity: 0; }
-  }
-  .citations {
-    font-size: 11px; color: var(--text-light); line-height: 1.7;
-    border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px;
-  }
-  .citations .cite-title { font-weight: 700; margin-bottom: 4px; }
-
-  /* ─── Reward Banner ─── */
+  @keyframes checkCollapse { to { max-height: 0; margin-bottom: 0; opacity: 0; } }
   .reward-banner {
     text-align: center; padding: 20px; background: #fff9f0;
     border: 1.5px solid #ffd0a0; border-radius: var(--radius); margin-top: 2px;
   }
   .reward-banner .banner-title { font-size: 14px; font-weight: 900; color: var(--orange); margin-bottom: 6px; }
   .reward-banner p { font-size: 12px; line-height: 1.8; }
-
-  /* ─── Expired Screen ─── */
-  .expired-screen {
+  .expired-screen, .notyet-screen {
     display: none; text-align: center;
     padding: 48px 24px; background: var(--card-bg);
     border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow);
   }
-  .expired-screen.visible { display: block; }
-  .expired-screen p { font-size: 14px; line-height: 2; color: var(--text); }
-  .expired-screen .push-note { margin-top: 16px; font-size: 14px; font-weight: 700; color: var(--teal); }
-
-  /* ─── ローディング中はheaderを隠す ─── */
+  .expired-screen.visible, .notyet-screen.visible { display: block; }
+  .expired-screen p, .notyet-screen p { font-size: 14px; line-height: 2; color: var(--text); }
+  .expired-screen .push-note, .notyet-screen .push-note { margin-top: 16px; font-size: 14px; font-weight: 700; color: var(--teal); }
   body.is-loading .header { display: none; }
-
-  /* ─── Loading / Error ─── */
   .loading-screen {
     text-align: center; padding: 80px 24px;
     background: var(--bg); color: var(--text-light); font-size: 14px;
@@ -198,35 +162,19 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .error-screen {
     display: none; text-align: center; padding: 48px 24px;
     background: var(--card-bg); border-radius: 0 0 var(--radius) var(--radius);
     box-shadow: var(--shadow); color: #c00; font-size: 14px; line-height: 1.8;
   }
   .error-screen.visible { display: block; }
-
-  /* ─── Notice bar ─── */
   .notice-bar {
     background: #f0fafa; border-top: 1px solid var(--teal);
     border-bottom: 1px solid var(--teal);
     text-align: center; padding: 10px 16px;
     font-size: 12px; color: var(--teal); font-weight: 700;
   }
-
-  /* ─── Not-yet screen（配信前） ─── */
-  .notyet-screen {
-    display: none; text-align: center;
-    padding: 48px 24px; background: var(--card-bg);
-    border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow);
-  }
-  .notyet-screen.visible { display: block; }
-  .notyet-screen p { font-size: 14px; line-height: 2; color: var(--text); }
-  .notyet-screen .push-note { margin-top: 16px; font-size: 14px; font-weight: 700; color: var(--teal); }
-
-  /* ─── Animations ─── */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -236,8 +184,6 @@
 </head>
 <body>
 <div class="container">
-
-  <!-- ===== HEADER (動的に書き換え) ===== -->
   <div class="header">
     <div class="brand">Tune Life</div>
     <div class="title" id="headerTitle">ポイント貯まるクイズ</div>
@@ -246,32 +192,26 @@
     <div class="deadline-badge" id="deadlineBadge">回答期限：読み込み中...</div>
   </div>
 
-  <!-- ===== LOADING ===== -->
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
     <div>読み込み中です...</div>
   </div>
 
-  <!-- ===== ERROR ===== -->
   <div class="error-screen" id="errorScreen">
     クイズの読み込みに失敗しました。<br>時間をおいて再度お試しください。
   </div>
 
-  <!-- ===== EXPIRED ===== -->
   <div class="expired-screen" id="expiredScreen">
     <p>クイズは終了しました。<br>沢山の方にご回答いただきありがとうございました！</p>
     <div class="push-note">毎日朝夕のPUSH通知もお楽しみに！</div>
   </div>
 
-  <!-- ===== NOT YET（配信前） ===== -->
   <div class="notyet-screen" id="notyetScreen">
     <p>本日のクイズはまだ配信されていません。<br>配信開始時刻になりましたら再度アクセスしてください。</p>
     <div class="push-note">毎日朝夕のPUSH通知もお楽しみに！</div>
   </div>
 
-  <!-- ===== QUESTION SCREEN ===== -->
   <div id="questionScreen" class="hidden">
-
     <div class="card" id="uid_block">
       <div class="section-label">
         Tune Life アプリの確認コードを入力してください（6文字）<span class="required">*</span>
@@ -294,12 +234,9 @@
       <div class="notice-bar">※ 回答は1人1回まで。2回以上の回答は無効となります</div>
       <button class="submit-btn" onclick="submitAnswer()" style="margin-top:12px;">回答する</button>
     </div>
+  </div>
 
-  </div><!-- /questionScreen -->
-
-  <!-- ===== RESULT SCREEN ===== -->
   <div id="resultScreen" class="result-screen">
-
     <div class="card animate-in">
       <div class="correct-label">正解は...</div>
       <div class="answer-box">
@@ -320,59 +257,47 @@
       <div class="banner-title" id="resultBannerTitle">正解した方！</div>
       <p id="resultBannerBody">10日以内にポイントが付与されます！<br>ポイント付与までしばらくお待ちいただけますと幸いです。</p>
     </div>
-
-  </div><!-- /resultScreen -->
-
-</div><!-- /container -->
+  </div>
+</div>
 
 <script>
 // =====================================================================
-// ★ 設定：GAS WebアプリのURLをここに入力してください
+// 設定：GAS WebアプリのURLをここに入力してください
 // =====================================================================
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbw7jPief1-F02kBbZxNVFcr-RBfS5oRjuD37Keyj2WxrjLyLkpZ6Og0aVjWnTyo4wqyvg/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxSm3HQtWN5-UBaztfqq94bAQHEjpliRQ-Jd0hBH-2XcbRNacDTATJcbeHO2LKGaDhI/exec';
 // =====================================================================
 
 let quizData = null;
 let selectedValue = null;
 
-// ── ユーティリティ ──────────────────────────────────────────────────
-
-/** "YYYY/MM/DD HH:mm:ss" または ISO形式 → Date
- *  GASのDate→JSON変換 "2026-07-13T09:00:00.000Z"(UTC)も吸収 */
 function parseJST(str) {
   if (!str) return null;
-  if (str.includes('T')) return new Date(str); // ISO形式はそのままパース
-  // "2026/07/13 18:00:00" → "2026-07-13T18:00:00+09:00"
-  const normalized = str.replace(/\//g, '-').replace(' ', 'T') + '+09:00';
+  if (str instanceof Date) return str;
+  if (String(str).includes('T')) return new Date(str);
+  const normalized = String(str).replace(/\//g, '-').replace(' ', 'T') + '+09:00';
   return new Date(normalized);
 }
 
-/** Date → "（本日）M月D日H時mm分" 形式（JSTで表示）
- *  当日なら「本日」を付ける、それ以外は日付のみ */
 function formatDeadline(date) {
   const jst = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
-  const m   = jst.getMonth() + 1;
-  const d   = jst.getDate();
-  const h   = jst.getHours();
+  const m = jst.getMonth() + 1;
+  const d = jst.getDate();
+  const h = jst.getHours();
   const min = String(jst.getMinutes()).padStart(2, '0');
 
-  // 今日の日付（JST）と比較
-  const nowJST   = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
-  const isToday  = nowJST.getFullYear() === jst.getFullYear()
-                && nowJST.getMonth()    === jst.getMonth()
-                && nowJST.getDate()     === jst.getDate();
+  const nowJST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  const isToday = nowJST.getFullYear() === jst.getFullYear()
+    && nowJST.getMonth() === jst.getMonth()
+    && nowJST.getDate() === jst.getDate();
 
   const prefix = isToday ? '本日' : '';
   return `${prefix}${m}月${d}日${h}時${min}分`;
 }
 
-/** 正解キー → 選択肢テキスト */
 function getAnswerText(key, data) {
   const map = { A: data.option_A, B: data.option_B, C: data.option_C };
   return map[key] || '';
 }
-
-// ── 画面切替ヘルパー ────────────────────────────────────────────────
 
 function showOnly(id) {
   ['loadingScreen','errorScreen','expiredScreen','notyetScreen','questionScreen','resultScreen']
@@ -392,26 +317,17 @@ function showOnly(id) {
     });
 }
 
-// ── ヘッダー描画 ────────────────────────────────────────────────────
-
 function renderHeader(data) {
-  // タイトルは固定文（headlineはヘッダー下部の帯テキストとして使わない）
   document.getElementById('headerTitle').textContent = 'ポイント貯まるクイズ';
-
-  // 回答期限バッジ：end_time の1分前を表示
   const endDate = parseJST(data.end_time);
-  if (endDate) {
-    const deadlineDate = new Date(endDate.getTime() - 60 * 1000); // -1分
-    document.getElementById('deadlineBadge').textContent =
-      `回答期限：${formatDeadline(deadlineDate)}まで`;
+  if (endDate && !isNaN(endDate.getTime())) {
+    const deadlineDate = new Date(endDate.getTime() - 60 * 1000);
+    document.getElementById('deadlineBadge').textContent = `回答期限：${formatDeadline(deadlineDate)}まで`;
   }
 }
 
-// ── 問題画面描画 ────────────────────────────────────────────────────
-
 function renderQuestion(data) {
-  document.getElementById('questionText').textContent = data.question;
-
+  document.getElementById('questionText').textContent = data.question || '';
   const optionsEl = document.getElementById('options');
   optionsEl.innerHTML = '';
 
@@ -419,7 +335,7 @@ function renderQuestion(data) {
     { key: 'A', text: data.option_A },
     { key: 'B', text: data.option_B },
     { key: 'C', text: data.option_C },
-  ].filter(o => o.text && o.text.trim() !== '');
+  ].filter(o => o.text && String(o.text).trim() !== '');
 
   opts.forEach(o => {
     const div = document.createElement('div');
@@ -433,8 +349,6 @@ function renderQuestion(data) {
     optionsEl.appendChild(div);
   });
 }
-
-// ── 結果画面描画 ────────────────────────────────────────────────────
 
 function renderResult(data, isCorrect) {
   const correctKey = (data.correct_answer || '').trim().toUpperCase();
@@ -455,15 +369,11 @@ function renderResult(data, isCorrect) {
   }
 }
 
-// ── 選択処理 ────────────────────────────────────────────────────────
-
 function selectOption(el) {
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selectedValue = el.dataset.value;
 }
-
-// ── 回答送信 ────────────────────────────────────────────────────────
 
 function submitAnswer() {
   const code = document.getElementById('codeInput').value.trim();
@@ -473,20 +383,22 @@ function submitAnswer() {
 
   const correctKey = (quizData.correct_answer || '').trim().toUpperCase();
   const isCorrect = selectedValue === correctKey;
-
-  // 選択肢の表示テキストを取得
   const selectedEl = document.querySelector(`.option[data-value="${selectedValue}"] span`);
   const selectedText = selectedEl ? selectedEl.textContent.trim() : '';
 
-  // GASに回答を記録（img送信方式：CORSもリダイレクトも回避）
   const recordParams = new URLSearchParams({
-    action:      'record',
-    start_time:  quizData.start_time ? new Date(quizData.start_time).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }).replace(/\//g, '/') : '',
-    tl_uid:      code,
-    answer_key:  selectedValue,
+    action: 'record',
+    delivery_date: quizData.delivery_date || '',
+    delivery_id: quizData.delivery_id || '',
+    headline: quizData.headline || '',
+    start_time: quizData.start_time ? new Date(quizData.start_time).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }).replace(/\//g, '/') : '',
+    tl_uid: code,
+    answer_key: selectedValue,
     answer_text: selectedText,
     answered_at: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
+    correct_answer: quizData.correct_answer || ''
   });
+
   const _img = new Image();
   _img.src = `${GAS_URL}?${recordParams.toString()}`;
 
@@ -495,94 +407,78 @@ function submitAnswer() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── tl_uid パラメータ自動入力 ────────────────────────────────────────
-
 (function fillCode() {
   const MAX_RETRY = 30;
   let count = 0;
+
   function tryFill() {
     const params = new URLSearchParams(window.location.search);
     const tlUid = params.get('tl_uid');
     if (!tlUid) return;
+
     const input = document.querySelector('input[placeholder="確認コードを入力"]');
     if (input) {
-      input.value = tlUid.replace(/^"|"$/g, "").replace(/^'|'$/g, ''); // クォート除去
-      // uid_block ごと非表示
+      input.value = tlUid.replace(/^"|"$/g, '').replace(/^'|'$/g, '');
       const uidBlock = input.closest('#uid_block');
       if (uidBlock) uidBlock.style.display = 'none';
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
       return;
     }
-    if (count < MAX_RETRY) { count++; setTimeout(tryFill, 300); }
+
+    if (count < MAX_RETRY) {
+      count++;
+      setTimeout(tryFill, 300);
+    }
   }
+
   tryFill();
 })();
 
-// ── d_time パラメータ解析 ────────────────────────────────────────────
-// 形式：YYYYMMDDm（朝）または YYYYMMDDe（夕方）
-// 例：20270727m → 2027年7月27日 朝配信
+function buildFetchUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const dt = params.get('dt');
 
-function parseDTime(param) {
-  if (!param) return null;
-  const m = param.match(/^(\d{4})(\d{2})(\d{2})([me])$/i);
-  if (!m) return null;
-  return {
-    year:   parseInt(m[1]),
-    month:  parseInt(m[2]),
-    day:    parseInt(m[3]),
-    timing: m[4].toLowerCase(), // 'm' or 'e'
-    // GASに渡す delivery_date 形式
-    dateStr: `${parseInt(m[1])}/${parseInt(m[2])}/${parseInt(m[3])}`,
-  };
+  if (dt) {
+    return `${GAS_URL}?action=get&dt=${encodeURIComponent(dt)}`;
+  }
+
+  return GAS_URL;
 }
-
-// ── メイン：GAS からデータ取得 ───────────────────────────────────────
 
 async function loadQuiz() {
   document.body.classList.add('is-loading');
   showOnly('loadingScreen');
+
   try {
-    // URLパラメータを取得
-    const params  = new URLSearchParams(window.location.search);
-    const dTime   = params.get('d_time');
-    const parsed  = parseDTime(dTime);
-
-    // d_time パラメータなし → 従来通り当日クイズ
-    const fetchUrl = parsed
-      ? `${GAS_URL}?action=get&date=${parsed.dateStr}&timing=${parsed.timing}`
-      : GAS_URL;
-
+    const fetchUrl = buildFetchUrl();
     const res = await fetch(fetchUrl);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
     const data = await res.json();
 
-    // クイズが見つからない場合はtune-life.comへリダイレクト
     if (data.error === 'no_quiz_found' || data.error === 'no_quiz_today') {
       window.location.href = 'https://tune-life.com/';
       return;
     }
+
     if (data.error) throw new Error(data.error);
 
     quizData = data;
 
-    // 時間チェックをヘッダー描画より先に行う（リダイレクト前にヘッダーを見せない）
-    const now       = new Date();
+    const now = new Date();
     const startDate = parseJST(data.start_time);
-    const endDate   = parseJST(data.end_time);
+    const endDate = parseJST(data.end_time);
 
-    // 配信区間より前 → tune-life.com にリダイレクト
-    if (startDate && now < startDate) {
+    if (startDate && !isNaN(startDate.getTime()) && now < startDate) {
       window.location.href = 'https://tune-life.com/';
       return;
     }
 
-    // ここで初めてヘッダーを表示
     document.body.classList.remove('is-loading');
     renderHeader(data);
 
-    // 配信区間終了後 → 終了画面
-    if (endDate && now > endDate) {
+    if (endDate && !isNaN(endDate.getTime()) && now > endDate) {
       showOnly('expiredScreen');
       return;
     }
@@ -590,8 +486,7 @@ async function loadQuiz() {
     renderQuestion(data);
     showOnly('questionScreen');
 
-    // 期限になったら自動で終了画面へ切替
-    if (endDate) {
+    if (endDate && !isNaN(endDate.getTime())) {
       const msUntilEnd = endDate.getTime() - now.getTime();
       if (msUntilEnd > 0) {
         setTimeout(() => {
@@ -601,7 +496,6 @@ async function loadQuiz() {
         }, msUntilEnd);
       }
     }
-
   } catch (e) {
     console.error('Quiz load error:', e);
     document.body.classList.remove('is-loading');
