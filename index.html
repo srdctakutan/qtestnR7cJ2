@@ -175,6 +175,13 @@
     text-align: center; padding: 10px 16px;
     font-size: 12px; color: var(--teal); font-weight: 700;
   }
+  /* ─── Force view (プレビュー) バナー ─── */
+  .forceview-banner {
+    background: #7c3aed; color: #fff;
+    text-align: center; padding: 8px 16px;
+    font-size: 12px; font-weight: 900; letter-spacing: 0.04em;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -277,33 +284,29 @@
 </head>
 <body>
 <div class="container">
+  <!-- ヘッダー：テキストは HEADER_CONFIG から script が描画（HTML内の文言は初期表示用のフォールバック） -->
   <div class="header">
-    <div class="brand">Tune Life</div>
+    <div class="brand" id="brandText">Tune Life</div>
     <div class="title" id="headerTitle">ポイント貯まるクイズ</div>
     <div class="reward-main" id="rewardMain">正解者には<span class="pts" id="correctPts">300ポイント</span>贈呈！</div>
     <div class="reward-sub" id="rewardSub">間違えても100ポイント贈呈</div>
     <div class="deadline-badge" id="deadlineBadge">回答期限：読み込み中...</div>
   </div>
-
   <div class="loading-screen" id="loadingScreen">
     <div class="spinner"></div>
     <div>読み込み中です...</div>
   </div>
-
   <div class="error-screen" id="errorScreen">
     クイズの読み込みに失敗しました。<br>時間をおいて再度お試しください。
   </div>
-
   <div class="expired-screen" id="expiredScreen">
     <p>クイズは終了しました。<br>沢山の方にご回答いただきありがとうございました！</p>
     <div class="push-note">毎日朝夕のPUSH通知もお楽しみに！</div>
   </div>
-
   <div class="notyet-screen" id="notyetScreen">
     <p>本日のクイズはまだ配信されていません。<br>配信開始時刻になりましたら再度アクセスしてください。</p>
     <div class="push-note">毎日朝夕のPUSH通知もお楽しみに！</div>
   </div>
-
   <div id="questionScreen" class="hidden">
     <div class="card" id="uid_block">
       <div class="section-label">
@@ -313,7 +316,6 @@
       <div class="hint">※ ここを間違えますとポイント付与ができませんのでご注意ください</div>
       <input type="text" class="input-field" id="codeInput" placeholder="確認コードを入力" maxlength="6">
     </div>
-
     <div class="card" style="margin-top:2px;">
       <div>
         <span class="question-badge">問題</span>
@@ -322,13 +324,11 @@
       <div class="question-text" id="questionText"></div>
       <div class="options" id="options"></div>
     </div>
-
     <div class="footer-card">
       <div class="notice-bar">※ 回答は1人1回まで。2回以上の回答は無効となります</div>
       <button class="submit-btn" onclick="submitAnswer()" style="margin-top:12px;">回答する</button>
     </div>
   </div>
-
   <div id="resultScreen" class="result-screen">
     <div class="card animate-in">
       <div class="correct-label">正解は...</div>
@@ -345,7 +345,6 @@
         </div>
       </div>
     </div>
-
     <div class="reward-banner animate-in" style="animation-delay:0.15s;">
       <div class="banner-title" id="resultBannerTitle">正解した方！</div>
       <p id="resultBannerBody">10日以内にポイントが付与されます！<br>ポイント付与までしばらくお待ちいただけますと幸いです。</p>
@@ -378,6 +377,24 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxSm3HQtWN5-UBaztfqq94bAQHEjpliRQ-Jd0hBH-2XcbRNacDTATJcbeHO2LKGaDhI/exec';
 
 // =====================================================================
+// 設定：ヘッダー表示（ここだけ編集すれば文言・ポイント数を変更できます）
+//   brand              : 上部ブランド名
+//   title              : クイズ見出し（固定文言）
+//   correctPts         : 正解時ポイント数
+//   wrongPts           : 不正解時ポイント数
+//   useHeadlineAsTitle : true にすると title の代わりに
+//                        クイズの headline を見出しに表示（既定 false＝現状維持）
+// =====================================================================
+const HEADER_CONFIG = {
+  brand: 'Tune Life',
+  title: 'ポイント貯まるクイズ',
+  correctPts: 300,
+  wrongPts: 100,
+  useHeadlineAsTitle: false,
+};
+// =====================================================================
+
+// =====================================================================
 // 設定：正解画面下部の固定バナー
 //   BANNER_ENABLED : true/false でバナー自体のON/OFF
 //   BANNER_URL     : タップ時の遷移先URL
@@ -394,7 +411,7 @@ const BANNER_ICON = '😴';
 
 let quizData = null;
 let selectedValue = null;
-
+let isForceView = false;   // dt_forceview 指定時：配信期間チェックを無視して表示
 function parseJST(str) {
   if (!str) return null;
   if (str instanceof Date) return str;
@@ -402,28 +419,23 @@ function parseJST(str) {
   const normalized = String(str).replace(/\//g, '-').replace(' ', 'T') + '+09:00';
   return new Date(normalized);
 }
-
 function formatDeadline(date) {
   const jst = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
   const m = jst.getMonth() + 1;
   const d = jst.getDate();
   const h = jst.getHours();
   const min = String(jst.getMinutes()).padStart(2, '0');
-
   const nowJST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
   const isToday = nowJST.getFullYear() === jst.getFullYear()
     && nowJST.getMonth() === jst.getMonth()
     && nowJST.getDate() === jst.getDate();
-
   const prefix = isToday ? '本日' : '';
   return `${prefix}${m}月${d}日${h}時${min}分`;
 }
-
 function getAnswerText(key, data) {
   const map = { A: data.option_A, B: data.option_B, C: data.option_C };
   return map[key] || '';
 }
-
 function showOnly(id) {
   ['loadingScreen','errorScreen','expiredScreen','notyetScreen','questionScreen','resultScreen']
     .forEach(s => {
@@ -491,26 +503,47 @@ function hideFixedBanner(manual) {
   if (manual) bannerManuallyClosed = true;
 }
 
+// ヘッダーの静的テキスト（ブランド／見出し／ポイント文言）を HEADER_CONFIG から描画
+function renderHeaderStatic(data) {
+  const brandEl = document.getElementById('brandText');
+  if (brandEl) brandEl.textContent = HEADER_CONFIG.brand;
+
+  // 見出し：既定は固定文言。useHeadlineAsTitle=true かつ headline があればそれを使用
+  const title = (HEADER_CONFIG.useHeadlineAsTitle && data && data.headline)
+    ? data.headline
+    : HEADER_CONFIG.title;
+  const titleEl = document.getElementById('headerTitle');
+  if (titleEl) titleEl.textContent = title;
+
+  // ポイント文言（span を含めて script 側で組み立て）
+  const rewardMainEl = document.getElementById('rewardMain');
+  if (rewardMainEl) {
+    rewardMainEl.innerHTML =
+      `正解者には<span class="pts" id="correctPts">${HEADER_CONFIG.correctPts}ポイント</span>贈呈！`;
+  }
+  const rewardSubEl = document.getElementById('rewardSub');
+  if (rewardSubEl) {
+    rewardSubEl.textContent = `間違えても${HEADER_CONFIG.wrongPts}ポイント贈呈`;
+  }
+}
+
 function renderHeader(data) {
-  document.getElementById('headerTitle').textContent = 'ポイント貯まるクイズ';
+  renderHeaderStatic(data);   // ← ブランド／見出し／ポイント文言を一括描画
   const endDate = parseJST(data.end_time);
   if (endDate && !isNaN(endDate.getTime())) {
     const deadlineDate = new Date(endDate.getTime() - 60 * 1000);
     document.getElementById('deadlineBadge').textContent = `回答期限：${formatDeadline(deadlineDate)}まで`;
   }
 }
-
 function renderQuestion(data) {
   document.getElementById('questionText').textContent = data.question || '';
   const optionsEl = document.getElementById('options');
   optionsEl.innerHTML = '';
-
   const opts = [
     { key: 'A', text: data.option_A },
     { key: 'B', text: data.option_B },
     { key: 'C', text: data.option_C },
   ].filter(o => o.text && String(o.text).trim() !== '');
-
   opts.forEach(o => {
     const div = document.createElement('div');
     div.className = 'option';
@@ -523,15 +556,12 @@ function renderQuestion(data) {
     optionsEl.appendChild(div);
   });
 }
-
 function renderResult(data, isCorrect) {
   const correctKey = (data.correct_answer || '').trim().toUpperCase();
   const answerText = getAnswerText(correctKey, data);
-
   document.getElementById('answerLetter').textContent = correctKey;
   document.getElementById('answerMain').textContent = answerText;
   document.getElementById('explanationText').textContent = data.explanation || '';
-
   if (isCorrect) {
     document.getElementById('resultBannerTitle').textContent = '正解した方！';
     document.getElementById('resultBannerBody').innerHTML =
@@ -542,54 +572,48 @@ function renderResult(data, isCorrect) {
       '不正解でもポイントが付与されます！<br>ポイント付与までしばらくお待ちいただけますと幸いです。';
   }
 }
-
 function selectOption(el) {
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   selectedValue = el.dataset.value;
 }
-
 function submitAnswer() {
   const code = document.getElementById('codeInput').value.trim();
   if (!code) { alert('確認コードを入力してください。'); return; }
   if (code.length !== 6) { alert('確認コードは6文字で入力してください。'); return; }
   if (!selectedValue) { alert('回答を選択してください。'); return; }
-
   const correctKey = (quizData.correct_answer || '').trim().toUpperCase();
   const isCorrect = selectedValue === correctKey;
   const selectedEl = document.querySelector(`.option[data-value="${selectedValue}"] span`);
   const selectedText = selectedEl ? selectedEl.textContent.trim() : '';
-
-  const recordParams = new URLSearchParams({
-    action: 'record',
-    delivery_date: quizData.delivery_date || '',
-    delivery_id: quizData.delivery_id || '',
-    headline: quizData.headline || '',
-    start_time: quizData.start_time ? new Date(quizData.start_time).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }).replace(/\//g, '/') : '',
-    tl_uid: code,
-    answer_key: selectedValue,
-    answer_text: selectedText,
-    answered_at: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
-    correct_answer: quizData.correct_answer || ''
-  });
-
-  const _img = new Image();
-  _img.src = `${GAS_URL}?${recordParams.toString()}`;
-
+  // 強制表示（プレビュー）時は回答をスプレッドシートに記録しない
+  if (!isForceView) {
+    const recordParams = new URLSearchParams({
+      action: 'record',
+      delivery_date: quizData.delivery_date || '',
+      delivery_id: quizData.delivery_id || '',
+      headline: quizData.headline || '',
+      start_time: quizData.start_time ? new Date(quizData.start_time).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }).replace(/\//g, '/') : '',
+      tl_uid: code,
+      answer_key: selectedValue,
+      answer_text: selectedText,
+      answered_at: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
+      correct_answer: quizData.correct_answer || ''
+    });
+    const _img = new Image();
+    _img.src = `${GAS_URL}?${recordParams.toString()}`;
+  }
   renderResult(quizData, isCorrect);
   showOnly('resultScreen');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
 (function fillCode() {
   const MAX_RETRY = 30;
   let count = 0;
-
   function tryFill() {
     const params = new URLSearchParams(window.location.search);
     const tlUid = params.get('tl_uid');
     if (!tlUid) return;
-
     const input = document.querySelector('input[placeholder="確認コードを入力"]');
     if (input) {
       input.value = tlUid.replace(/^"|"$/g, '').replace(/^'|'$/g, '');
@@ -599,67 +623,87 @@ function submitAnswer() {
       input.dispatchEvent(new Event('change', { bubbles: true }));
       return;
     }
-
     if (count < MAX_RETRY) {
       count++;
       setTimeout(tryFill, 300);
     }
   }
-
   tryFill();
 })();
-
 function buildFetchUrl() {
   const params = new URLSearchParams(window.location.search);
+  // 強制表示：?dt_forceview=YYYYMMDD+delivery_id（配信期間を無視して表示）
+  const dtForce = params.get('dt_forceview');
+  if (dtForce) {
+    isForceView = true;
+    return `${GAS_URL}?action=get&dt=${encodeURIComponent(dtForce)}`;
+  }
+  // 通常：?dt=YYYYMMDD+delivery_id
   const dt = params.get('dt');
-
   if (dt) {
     return `${GAS_URL}?action=get&dt=${encodeURIComponent(dt)}`;
   }
-
   return GAS_URL;
 }
-
+function showForceViewBanner(data) {
+  const header = document.querySelector('.header');
+  if (!header || document.getElementById('forceViewBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'forceViewBanner';
+  banner.className = 'forceview-banner';
+  const label = (data.delivery_date || '') + (data.delivery_id ? ` [${data.delivery_id}]` : '');
+  banner.textContent = `🔍 プレビュー表示中（配信期間チェックなし）${label ? '：' + label : ''}`;
+  header.parentNode.insertBefore(banner, header);
+}
 async function loadQuiz() {
   document.body.classList.add('is-loading');
   showOnly('loadingScreen');
-
   try {
     const fetchUrl = buildFetchUrl();
     const res = await fetch(fetchUrl);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
     const data = await res.json();
-
-    if (data.error === 'no_quiz_found' || data.error === 'no_quiz_today') {
+    if (data.error === 'no_quiz_found' || data.error === 'no_quiz_today' || data.error === 'invalid_dt') {
+      if (isForceView) {
+        // 強制表示時はリダイレクトせず、その場でエラー表示
+        document.body.classList.remove('is-loading');
+        document.getElementById('errorScreen').textContent =
+          data.error === 'invalid_dt'
+            ? 'dt_forceview の形式が正しくありません（YYYYMMDD + 識別子）。'
+            : '指定された dt_forceview のクイズが見つかりませんでした。';
+        showOnly('errorScreen');
+        return;
+      }
       window.location.href = 'https://tune-life.com/';
       return;
     }
-
     if (data.error) throw new Error(data.error);
-
     quizData = data;
-
     const now = new Date();
     const startDate = parseJST(data.start_time);
     const endDate = parseJST(data.end_time);
-
+    // ── 強制表示：配信前リダイレクト・終了画面切替をすべてスキップして常に問題を表示 ──
+    if (isForceView) {
+      document.body.classList.remove('is-loading');
+      showForceViewBanner(data);
+      renderHeader(data);
+      renderQuestion(data);
+      showOnly('questionScreen');
+      return;
+    }
+    // ── 通常挙動：配信期間チェックあり ──
     if (startDate && !isNaN(startDate.getTime()) && now < startDate) {
       window.location.href = 'https://tune-life.com/';
       return;
     }
-
     document.body.classList.remove('is-loading');
     renderHeader(data);
-
     if (endDate && !isNaN(endDate.getTime()) && now > endDate) {
       showOnly('expiredScreen');
       return;
     }
-
     renderQuestion(data);
     showOnly('questionScreen');
-
     if (endDate && !isNaN(endDate.getTime())) {
       const msUntilEnd = endDate.getTime() - now.getTime();
       if (msUntilEnd > 0) {
@@ -676,7 +720,6 @@ async function loadQuiz() {
     showOnly('errorScreen');
   }
 }
-
 setupFixedBanner();
 loadQuiz();
 </script>
